@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,9 @@ public class Hero : MonoBehaviour
 {
     public int maxHp;
     public int currHp;
-    public float attackSpeed;
-    public int damage;
-
-    [SerializeField] private HeroController controller;
+    
+    
+    [SerializeField] private Weapon weapon;
 
     private float lastShootingTime;
 
@@ -19,15 +19,10 @@ public class Hero : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        Shoot();
+        weapon.FindNearestTarget();
+        weapon.Shoot();
     }
-    private void Shoot()
-    {
-        if (!controller.isMoving && Time.time - lastShootingTime >= attackSpeed)
-        {
-            lastShootingTime = Time.time;
-            Debug.Log("Shoot");
-        }
-    }
+    
 }
 
+    
