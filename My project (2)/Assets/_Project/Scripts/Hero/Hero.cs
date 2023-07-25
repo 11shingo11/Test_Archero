@@ -16,6 +16,7 @@ public class Hero : MonoBehaviour
     private void Awake()
     {
         lastShootingTime = Time.time;
+        currHp = maxHp;
     }
     private void FixedUpdate()
     {
@@ -23,6 +24,12 @@ public class Hero : MonoBehaviour
         weapon.Shoot();
     }
     
+    public void ReciveDamage(Enemy enemy)
+    {
+        if (currHp - enemy.damage > 0) currHp -= enemy.damage;
+        //else Death();
+        Debug.Log("Hero Recirve" + " " + enemy.damage.ToString());
+    }
 }
 
     
