@@ -14,7 +14,7 @@ public class HeroController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         OnHeroMove();
         if(_rb.velocity == Vector3.zero)

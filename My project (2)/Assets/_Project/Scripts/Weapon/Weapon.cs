@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour
 
             GameObject newProjectile = Instantiate(projectilePrefab, projectilePos.position , transform.rotation);
             lastShootingTime = Time.time;
-            Debug.Log("Shoot");
+            //Debug.Log("Shoot");
         }
     }
 

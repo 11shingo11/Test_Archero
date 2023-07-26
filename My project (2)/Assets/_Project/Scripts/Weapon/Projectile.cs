@@ -11,15 +11,11 @@ public class Projectile : MonoBehaviour
     private void Update()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
+        Destroy(gameObject, 5f);
     }
 
     private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log(other.ToString());
-        if (other.gameObject.name == "Enemy")
-            other.gameObject.GetComponent<Enemy>().RecieveDamage(); ;
-            
-
+    {    
         Destroy(gameObject);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,8 @@ public class Enemy : MonoBehaviour
     private Transform player; // —сылка на трансформ игрока
     private Vector3 lastKnownPlayerPosition; // ѕоследнее известное местоположение игрока
     private Vector3 targetPosition; // ÷елева€ позици€ дл€ перемещени€
-
+    public bool dead = false;
+    [SerializeField] private Player playerGold;
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform; // Ќаходим игрока по тегу
@@ -32,13 +34,17 @@ public class Enemy : MonoBehaviour
         if (canSeePlayer)
         {
             // ≈сли видим игрока, то двигаемс€ к его позиции и обновл€ем последнее известное местоположение
+            Vector3 directionToPlayer = player.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(new Vector3(-directionToPlayer.x, 0, -directionToPlayer.z));
+
             lastKnownPlayerPosition = player.position;
-            targetPosition = player.position;
+            targetPosition = new Vector3(player.position.x, transform.position.y, player.position.z); // —охран€ем только горизонтальные координаты
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, movementSpeed * Time.deltaTime);
         }
         else
         {
             // ≈сли игрока не видим, то перемещаемс€ к последнему известному местоположению
-            targetPosition = lastKnownPlayerPosition;
+            targetPosition = new Vector3(lastKnownPlayerPosition.x, transform.position.y, lastKnownPlayerPosition.z); // —охран€ем только горизонтальные координаты
         }
 
         // ƒвигаемс€ к целевой позиции
@@ -66,25 +72,36 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         currHp = maxHp;
+        playerGold = FindObjectOfType<Camera>().GetComponent<Player>();
     }
 
     public void RecieveDamage()
     {
         if (currHp - dmg.damage > 0) currHp -= dmg.damage;
-        else Death();
-        Debug.Log("you Recirve" + " " + dmg.damage.ToString());
+        else if (!dead) Death();
+        else return;
+        //Debug.Log("you Recirve" + " " + dmg.damage.ToString());
     }
 
     public void Death()
     {
+        dead = true;
         Destroy(gameObject);
+        playerGold.GainGold();
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.ToString());
+        //Debug.Log(other.ToString());
         if (other.gameObject.name == "Hero")
             other.gameObject.GetComponent<Hero>().ReciveDamage(this);
-    } 
+        if (other.gameObject.name == "Projectile(Clone)")
+            RecieveDamage();
+    }
+
+    private void OnShootingPosition()
+    {
+
+    }
 }
 
 

@@ -10,6 +10,8 @@ public class CameraBounds : MonoBehaviour
     [SerializeField][Tooltip("ќфсет позиции объектов от кра€ камеры")] private float offset = 1;
     public float xLeft;
     public float xRight;
+    public float zTop;
+    public float zBot;
 
     private void Awake()
     {
@@ -33,13 +35,22 @@ public class CameraBounds : MonoBehaviour
         float distance = -Vector3.Project(cameraToObject, camTransform.forward).y;
 
         // вершины "среза" пирамиды видимости камеры на необходимом рассто€нии от камеры
+        var leftTop = cam.ViewportToWorldPoint(new Vector3(0, 1, distance));
         var leftBot = cam.ViewportToWorldPoint(new Vector3(0, 0, distance));
         var rightBot = cam.ViewportToWorldPoint(new Vector3(1, 0, distance));
+        var rightTop = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
 
         // границы в плоскости XZ, т.к. камера стоит выше остальных объектов
         xLeft = leftBot.x + offset;
-        xRight = rightBot.x - offset;
-
+        xRight = rightTop.x - offset;
+        zBot = leftBot.z + offset;
+        zTop = rightTop.z - offset;
+#if UNITY_EDITOR
+        Gizmos.DrawLine(leftBot, leftTop);
+        Gizmos.DrawLine(leftBot, rightBot);
+        Gizmos.DrawLine(rightBot, rightTop);
+        Gizmos.DrawLine(leftTop, rightTop);
+#endif
 
     }
 }
