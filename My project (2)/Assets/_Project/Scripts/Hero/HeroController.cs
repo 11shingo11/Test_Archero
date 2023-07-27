@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HeroController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Скорость движения персонажа
-    public FixedJoystick joystick; // Ссылка на джойстик
+    public float moveSpeed = 5f;
+    public FixedJoystick joystick; 
     public bool isMoving;
     private Rigidbody _rb;
 

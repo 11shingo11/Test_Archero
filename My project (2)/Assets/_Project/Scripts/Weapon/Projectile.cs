@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f; // Скорость полета снаряда
+    public float speed = 10f; 
     public int damage = 1;
-    private Enemy enemy;
 
+
+    private void Start()
+    {
+        Destroy(gameObject, 5f);
+    }
     private void Update()
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-        Destroy(gameObject, 5f);
     }
 
     private void OnTriggerEnter(Collider other)
     {    
+        if(other.TryGetComponent<IDamageble>(out IDamageble damageble))
+            damageble.ReciveDamage(damage);
         Destroy(gameObject);
     }
 

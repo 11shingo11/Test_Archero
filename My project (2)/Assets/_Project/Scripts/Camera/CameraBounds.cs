@@ -31,16 +31,13 @@ public class CameraBounds : MonoBehaviour
         var camTransform = cam.transform;
         var cameraToObject = planeTransform.position - camTransform.position;
 
-        // отрицание потому что игровые объекты в данном случае находятся ниже камеры по оси y
         float distance = -Vector3.Project(cameraToObject, camTransform.forward).y;
 
-        // вершины "среза" пирамиды видимости камеры на необходимом расстоянии от камеры
         var leftTop = cam.ViewportToWorldPoint(new Vector3(0, 1, distance));
         var leftBot = cam.ViewportToWorldPoint(new Vector3(0, 0, distance));
         var rightBot = cam.ViewportToWorldPoint(new Vector3(1, 0, distance));
         var rightTop = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
 
-        // границы в плоскости XZ, т.к. камера стоит выше остальных объектов
         xLeft = leftBot.x + offset;
         xRight = rightTop.x - offset;
         zBot = leftBot.z + offset;

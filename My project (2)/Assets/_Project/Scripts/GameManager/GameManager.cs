@@ -7,10 +7,14 @@ public class GameManager : MonoBehaviour
     public EnemySpawner enemySpawner;
     public HeroController playerController;
     private bool isCountdownOver = false;
+    public int countEnemys;
+    public GameObject endPlane;
+    public GameObject pointer;
+
 
     private void Start()
     {
-        // Запускаем корутину с отсчетом
+        countEnemys = enemySpawner.numberOfEnemies;
         StartCoroutine(StartGameWithDelay());
     }
 
@@ -23,13 +27,12 @@ public class GameManager : MonoBehaviour
 
         while (currentTime < countdownDuration)
         {
-            currentTime += Time.unscaledDeltaTime; // Используем unscaledDeltaTime для отсчета без учета Time.timeScale
+            currentTime += Time.unscaledDeltaTime; 
             yield return null;
         }
 
         isCountdownOver = true;
 
-        // Активируем управление игроком
         playerController.enabled = true;
     }
 
@@ -42,5 +45,17 @@ public class GameManager : MonoBehaviour
         }
         else return;
     }
+
+    public void EndGame()
+    {
+        if (countEnemys == 0)
+        {
+            endPlane.SetActive(true);
+            pointer.SetActive(true);
+        }
+        else return;
+    }
 }
+
+
 
